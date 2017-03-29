@@ -209,28 +209,69 @@
     }
     // Loads the Content for the Contact Page
     function LoadContactPage() {
-        var FullName = document.getElementById("FullName");
-        var ContactNumber = document.getElementById("ContactNumber");
-        var Email = document.getElementById("Email");
-        var Message = document.getElementById("Message");
+        // var FullName = document.getElementById("FullName");
+        let FullName = $("#FullName");
+        var ContactNumber = $("#ContactNumber");
+        var Email = $("#Email"); 
+        var Message = $("#Message");
         // let SendButton = document.getElementById("SendButton"); --Vanilla JS
         //this returns an array, so you can actually pinpoint the element you want by saying [0]
-        var SendButton = $("#SendButton")[0]; //--JQuery
+        var SendButton = $("#SendButton"); //--JQuery
+
+        // SendButton.text("Don't Send!");
         //let SendButton = document.querySelectorAll("#SendButton")[0];
-        console.log(SendButton.textContent);
-        SendButton.addEventListener("click", function (event) {
+        console.log(SendButton.text());
+
+        FullName.change(function(){
+            let FullNameString = FullName.val();
+            if (FullNameString.length < 2){
+                $("#FullNameMessage").show(0, function(){
+                    $(this).text("Full Name is too Short");
+                    $(this).css("color","red");
+                });
+
+                FullName.focus();
+                FullName.select();
+            }
+
+            else {
+                 $("#FullNameErrorMessage").hide();
+            }
+        })
+
+        function isValidEmailAddress(emailAddress) {
+            var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+            return pattern.test(emailAddress);
+        };
+
+        Email.change(function(){
+          if(!isValidEmailAddress(Email.val())){
+             $("#EmailMessage").show(0, function(){
+                $(this).text("Invalid Email Address");
+                $(this).css("color", "red");
+              });
+            Email.focus();
+            Email.select();
+          }
+          else {
+            $("#EmailErrorMessage").hide();
+          }
+        })
+
+
+        SendButton.on("click", function (event) {
             event.preventDefault();
-            console.log(FullName);
-            console.log(ContactNumber);
-            console.log(Email);
-            console.log(Message);
+            console.log(FullName.val());
+            //console.log(ContactNumber.val());
+            //console.log(Email.val());
+            //console.log(Message.val());
         });
 
         //get all input elements with the type of text
         $("input").dblclick(function(){
             $(this).val("");//clear the text box
         });
-
+        //both these sytax do the same 
         $("input").on("dblclick", function(){
             $(this).css("background-color","red");
         });
